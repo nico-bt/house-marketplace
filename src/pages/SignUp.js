@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {Link, useNavigate} from "react-router-dom"
+import { toast } from 'react-toastify';
 
 // Firebase
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
@@ -51,10 +52,10 @@ function SignUp() {
       // 2) Add document to Database in the "users" collection
       await setDoc(doc(db,"users", user.uid), formDataCopy)
 
-      navigate("/")
+      navigate("/profile")
 
     } catch (error) {
-      console.log(error)
+      toast.error(error.message)
     }
 
   }
