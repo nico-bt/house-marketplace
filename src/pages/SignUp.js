@@ -1,9 +1,16 @@
 import React, {useState} from 'react'
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
+
+// Firebase
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { db } from "../firebase.config.js"
+
 import {ReactComponent as ArrowRightIcon} from "../assets/svg/keyboardArrowRightIcon.svg"
 import visibilityIcon from "../assets/svg/visibilityIcon.svg"
 
 function SignUp() {
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -18,7 +25,38 @@ function SignUp() {
         [e.target.id]: e.target.value
       }}
     )
-    console.log(formData)
+  }
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+
+    try {
+      // Auth with Firebase
+      const auth = getAuth()
+
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password)
+
+      const user = userCredential.user
+
+      updateProfile(auth.currentUser, {
+        displayName: formData.name
+      })
+      
+      // Add user to db CloudFireStore
+      // 1) Create object without password and add timestamp
+      const formDataCopy = {...formData}
+      delete formDataCopy.password
+      formDataCopy.timestamp = serverTimestamp()
+      
+      // 2) Add document to Database in the "users" collection
+      await setDoc(doc(db,"users", user.uid), formDataCopy)
+
+      navigate("/")
+
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
   return (
@@ -28,7 +66,7 @@ function SignUp() {
           <p className='pageHeader'>Welcome back</p>
         </header>
 
-        <form>
+        <form onSubmit={onSubmit}>
           <input 
             type="text" 
             className='nameInput' 
