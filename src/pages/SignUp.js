@@ -9,6 +9,7 @@ import { db } from "../firebase.config.js"
 
 import {ReactComponent as ArrowRightIcon} from "../assets/svg/keyboardArrowRightIcon.svg"
 import visibilityIcon from "../assets/svg/visibilityIcon.svg"
+import OAuth from '../components/OAuth.js';
 
 function SignUp() {
   const navigate = useNavigate()
@@ -107,7 +108,7 @@ function SignUp() {
 
           <div className='signUpBar'>
             <p className='signUpText'>
-              Sign In
+              Sign Up
             </p>
             <button className='signUpButton'>
               <ArrowRightIcon fill="white" width="34px" height="34px" />
@@ -115,7 +116,7 @@ function SignUp() {
           </div>
         </form>
 
-        {/* To do: Google Auth */}
+        <OAuth />
 
         <Link to="/sign-in" className='registerLink'>
           Sign In Instead
