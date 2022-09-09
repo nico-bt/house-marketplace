@@ -18,7 +18,7 @@ function Navbar() {
 
                 <NavLink className='navbarListItem' to="/offers">
                     <OfferIcon width="36px" height="36px" />
-                    <p>Offer</p>
+                    <p>Offers</p>
                 </NavLink>
 
                 <NavLink className='navbarListItem' to="/profile">
