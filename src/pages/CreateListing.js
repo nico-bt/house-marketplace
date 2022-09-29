@@ -5,6 +5,7 @@ import { toast } from 'react-toastify'
 //Firebase
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore'
 import { db } from '../firebase.config'
 //uuid to give unique names to imgs
 import { v4 as uuidv4 } from 'uuid'
@@ -115,8 +116,23 @@ function CreateListing() {
             toast.error('Images not uploaded')
             return
         })
-        setLoading(false)
         
+        // Object to save ind database
+        const formDataCopy = {
+            ...formData,
+            imgUrls,
+            timestamp: serverTimestamp(),
+        }
+
+        delete formDataCopy.images
+        !formDataCopy.offer && delete formDataCopy.discountedPrice
+
+        // Save to db
+        const docRef = await addDoc(collection(db, 'listings'), formDataCopy)
+        
+        setLoading(false)
+        toast.success('Listing saved')
+        navigate(`/category/${formDataCopy.type}/${docRef.id}`)
     }
     
     const onMutate = (e) => {
