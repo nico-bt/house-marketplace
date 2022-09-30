@@ -589,10 +589,42 @@ button {
   font-weight: 600;
 }
 
+.contactLandlord-Container{
+  display: flex;
+  max-width: 650px;
+  margin-inline: auto;
+  align-items: center;
+  justify-content: center;
+}
+
 .contactLandlord {
-  margin-top: 2rem;
   display: flex;
   align-items: center;
+  justify-items: center;
+  flex-direction: column;
+  background-color: #5fe7a3;
+  padding: 15px;
+  border-radius: 2rem;
+  font-size: 0.85rem;
+}
+.contactLandlord > p {
+  font-size: 1.2rem;
+}
+.contactLandlord p,
+.contactLandlord h2 {
+  margin: 0.25rem;
+}
+
+.copiedEmailMessage{
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  max-width: 380px;
+  margin: 10px auto;
+  padding: 12px;
+  text-align: center;
+  font-size: 1.1rem;
 }
 
 .landlordName {
