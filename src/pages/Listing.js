@@ -1,14 +1,22 @@
+//React
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 //Firebase
 import { getDoc, doc } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import { db } from '../firebase.config'
-// Spinner and icon
+// Spinner, icons and toast
 import Spinner from '../components/Spinner'
 import shareIcon from '../assets/svg/shareIcon.svg'
 import copyIcon from '../assets/svg/copyToClipboard.svg'
 import { toast } from 'react-toastify'
+// Swiper (for imgs slider)
+import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import 'swiper/css'
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
 
 function Listing() {
 
@@ -77,8 +85,24 @@ function Listing() {
     }
     
     return (
-        <main>
-            {/* To do: Slider */}
+        <main className='max-width'>
+            {/* Slider */}
+            <Swiper 
+                slidesPerView={1} 
+                pagination={{ clickable: true }} 
+                className="swiper-container" 
+                modules={[Navigation, Pagination, Scrollbar, A11y]}
+                navigation
+                scrollbar={{ draggable: true }}
+            >
+                {listing.imgUrls.map((url, index) => (
+                    <SwiperSlide key={index}>
+                        <div
+                            className='swiperSlideDiv' 
+                            style={{background: `url(${url}) center no-repeat`, backgroundSize:"cover"}}></div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
 
             {/* Copy link to clipboard to share ******/}
             <div
@@ -143,8 +167,8 @@ function Listing() {
                             setTimeout(() => {setEmailCopied(false)}, 2000)
                         }}
                     />
+                    {emailCopied && <p className='copiedEmailMessage'>Email copied to clipboard!</p>}
                 </div>
-                {emailCopied && <p className='copiedEmailMessage'>Email copied to clipboard!</p>}
                 </>
             )}    
 
