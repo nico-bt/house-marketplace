@@ -11,6 +11,7 @@ function Category() {
   const [listings, setListings] = useState(null)
   const [loading, setLoading] = useState(true)
   const [lastFetchedListing, setLastFetchedListing] = useState(null)
+  const [areMoreListingsToShow, setAreMoreListingsToShow] = useState(false)
 
   const params = useParams()
 
@@ -25,10 +26,30 @@ function Category() {
           listingsRef,
           where('type', '==', params.categoryName),
           orderBy('timestamp', 'desc'),
-          limit(10)
+          limit(5)
         )
         // Execute query
         const querySnap = await getDocs(q)
+
+        // Get the last visible doc for pagination. Pass this to the onFetchMoreListings() function
+        const lastVisibleDoc = querySnap.docs[querySnap.docs.length-1]
+        setLastFetchedListing(lastVisibleDoc)
+
+        // Check if there are more items to show after the last one fetched. To dinamically display the "show more" button
+        const qRemaining = query(
+          listingsRef,
+          where('type', '==', params.categoryName),
+          orderBy('timestamp', 'desc'),
+          startAfter(lastVisibleDoc),
+          limit(1)
+        )
+        const qRemainingSnap = await getDocs(qRemaining)
+        console.log(qRemainingSnap);
+        if(qRemainingSnap.docs.length > 0){
+          setAreMoreListingsToShow(true)
+        } else {
+          setAreMoreListingsToShow(false)
+        }
 
         const listingsFromQuery = []
 
@@ -54,6 +75,58 @@ function Category() {
   }, [params.categoryName])
   
 
+  // Pagination / Load More Listings
+  const onFetchMoreListings = async () => {
+    try {
+      // Get reference
+      const listingsRef = collection(db, 'listings')
+
+      // Create a query
+      const q = query(
+        listingsRef,
+        where('type', '==', params.categoryName),
+        orderBy('timestamp', 'desc'),
+        startAfter(lastFetchedListing),
+        limit(5)
+      )
+
+      // Execute query
+      const querySnap = await getDocs(q)
+
+      const lastVisibleDoc = querySnap.docs[querySnap.docs.length - 1]
+      setLastFetchedListing(lastVisibleDoc)
+
+      // Check if there are more items to show after the last one fetched. To dinamically display the "show more" button
+      const qRemaining = query(
+        listingsRef,
+        where('type', '==', params.categoryName),
+        orderBy('timestamp', 'desc'),
+        startAfter(lastVisibleDoc),
+        limit(1)
+      )
+      const qRemainingSnap = await getDocs(qRemaining)
+      if(qRemainingSnap.size > 0){
+        setAreMoreListingsToShow(true)
+      } else {
+        setAreMoreListingsToShow(false)
+      }
+
+      const listings = []
+
+      querySnap.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        })
+      })
+
+      setListings((prevState) => [...prevState, ...listings])
+      setLoading(false)
+    } catch (error) {
+      toast.error('Could not fetch listings')
+    }
+  }
+  
   return (
     <div className='category'>
       <header>
@@ -78,12 +151,13 @@ function Category() {
 
           <br />
           <br />
-
-          {/* {lastFetchedListing && (
+          
+          {areMoreListingsToShow && (
             <p className='loadMore' onClick={onFetchMoreListings}>
               Load More
             </p>
-          )} */}
+          )}
+
         </>
       ) : (
         <p>No listings for {params.categoryName}</p>
