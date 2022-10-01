@@ -1,13 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import {getAuth, updateProfile} from "firebase/auth"
-import { updateDoc, doc } from 'firebase/firestore'
+import { updateDoc, doc, collection, getDocs, query, where, orderBy, deleteDoc } from 'firebase/firestore'
 import { db } from '../firebase.config'
 import { useNavigate } from 'react-router-dom'
 import {toast} from "react-toastify"
 // Icons:
 import arrowRight from '../assets/svg/keyboardArrowRightIcon.svg'
 import homeIcon from '../assets/svg/homeIcon.svg'
+// Component for display individual listing
+import ListingItem from '../components/ListingItem'
 
 function Profile() {
   const auth = getAuth()
@@ -16,8 +18,39 @@ function Profile() {
     name: auth.currentUser.displayName,
     email: auth.currentUser.email
   })
+  const [loading, setLoading] = useState(true)
+  const [listings, setListings] = useState(null)
 
   const navigate = useNavigate()
+
+  // Get user listings
+  useEffect(() => {
+    const fetchUserListings = async () => {
+      const listingsRef = collection(db, 'listings')
+
+      const q = query(
+        listingsRef,
+        where('userRef', '==', auth.currentUser.uid),
+        orderBy('timestamp', 'desc')
+      )
+
+      const querySnap = await getDocs(q)
+
+      let listings = []
+
+      querySnap.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        })
+      })
+
+      setListings(listings)
+      setLoading(false)
+    }
+
+    fetchUserListings()
+  }, [auth.currentUser.uid])
 
   const onLogout = (e) => {
     auth.signOut()
@@ -45,6 +78,19 @@ function Profile() {
       ...prevState,
       [e.target.id]: e.target.value
     }))
+  }
+
+  const onDelete = async (listingId) => {
+    if (window.confirm('Are you sure you want to delete?')) {
+      const docRef = doc(db, 'listings', listingId)
+      await deleteDoc(docRef)
+
+      const updatedListings = listings.filter(
+        (listing) => listing.id !== listingId
+      )
+      setListings(updatedListings)
+      toast.success('Successfully deleted')
+    }
   }
 
   return (
@@ -90,6 +136,19 @@ function Profile() {
           <p>Sell or rent your home</p>
           <img src={arrowRight} alt='arrow right' />
         </Link>
+
+        {(!loading && listings) && (
+          <div style={{marginTop:"2rem"}}>
+            <h2> {listings.length>0 ? "Your publications: " : "No publications yet"} </h2>
+            {listings.map((item) => (
+              <ListingItem 
+                listing={item.data} 
+                id={item.id} 
+                key={item.id}
+                onDelete = {() => onDelete(item.id)}/>
+            ))}
+          </div>
+        )}
 
       </main>
     </div>

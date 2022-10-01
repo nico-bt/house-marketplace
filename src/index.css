@@ -85,8 +85,8 @@ button {
 .removeIcon {
   cursor: pointer;
   position: absolute;
-  top: -3%;
-  right: -2%;
+  top: -10%;
+  right: 10%;
 }
 .editIcon {
   cursor: pointer;
@@ -456,6 +456,7 @@ button {
 
 .categoryListingDetails {
   width: 65%;
+  position: relative;
 }
 @media (min-width: 1024px) {
   .categoryListingDetails {
