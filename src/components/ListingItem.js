@@ -4,6 +4,10 @@ import { ReactComponent as EditIcon } from '../assets/svg/editIcon.svg'
 import bedIcon from '../assets/svg/bedIcon.svg'
 import bathtubIcon from '../assets/svg/bathtubIcon.svg'
 
+// Options to format numbers as currency
+const options = { style: 'currency', currency: 'USD', maximumFractionDigits: 0, minimumFractionDigits: 0 }
+const numberFormat = new Intl.NumberFormat('en-US', options);
+
 function ListingItem({ listing, id, onEdit, onDelete }) {
   return (
     <li className='categoryListing'>
@@ -17,14 +21,7 @@ function ListingItem({ listing, id, onEdit, onDelete }) {
           <p className='categoryListingName'>{listing.name}</p>
 
           <p className='categoryListingPrice'>
-            $
-            {listing.offer
-              ? listing.discountedPrice
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-              : listing.regularPrice
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            {listing.offer? numberFormat.format(listing.discountedPrice) : numberFormat.format(listing.regularPrice)}
             {listing.type === 'rent' && ' / Month'}
           </p>
 

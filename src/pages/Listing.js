@@ -133,7 +133,7 @@ function Listing() {
                 </p>
                 {listing.offer && (
                     <p className='discountPrice'>
-                        ${listing.regularPrice - listing.discountedPrice} discount
+                        {numberFormat.format(listing.regularPrice - listing.discountedPrice)} discount
                     </p>
                 )}
 
