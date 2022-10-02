@@ -1,9 +1,8 @@
 //React
 import { useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 //Firebase
 import { getDoc, doc } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
 import { db } from '../firebase.config'
 // Spinner, icons and toast
 import Spinner from '../components/Spinner'
@@ -11,7 +10,7 @@ import shareIcon from '../assets/svg/shareIcon.svg'
 import copyIcon from '../assets/svg/copyToClipboard.svg'
 import { toast } from 'react-toastify'
 // Swiper (for imgs slider)
-import SwiperCore, { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import 'swiper/css'
 import 'swiper/css/navigation';
@@ -20,15 +19,12 @@ import 'swiper/css/scrollbar';
 
 function Listing() {
 
-    const {categoryName, listingId} = useParams()
+    const { listingId } = useParams()
     const [listing, setListing] = useState(null)
     const [landlord, setLandlord] = useState(null)
     const [isLoading, setisLoading] = useState(true)
     const [shareLinkCopied, setShareLinkCopied] = useState(false)
     const [emailCopied, setEmailCopied] = useState(false)
-
-    const navigate = useNavigate()
-    const auth = getAuth()
 
     useEffect(() => {
         const fetchListing = async () => {
@@ -152,7 +148,7 @@ function Listing() {
             {landlord?.email && (
                 <>
                 <div className='contactLandlord-Container'>
-                    <a href={`mailto:${landlord.email}?Subject=${listing.name}`} className='contactLandlord' target="_blank">
+                    <a href={`mailto:${landlord.email}?Subject=${listing.name}`} className='contactLandlord' target="_blank" rel="noreferrer">
                         <h2>Contact Landlord:</h2>
                         <p >Email: {landlord?.email}</p>
                     </a>
