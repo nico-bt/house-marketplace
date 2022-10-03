@@ -500,17 +500,18 @@ button {
 }
 
 .loadMore {
+  font-size: 1.2rem;
   cursor: pointer;
-  width: 8rem;
+  width: 12rem;
   margin: 0 auto;
   text-align: center;
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem 0.5rem;
   background-color: #000000;
   color: #ffffff;
   font-weight: 600;
   border-radius: 1rem;
   opacity: 0.7;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .listingDetails {
