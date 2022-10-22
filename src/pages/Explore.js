@@ -18,19 +18,26 @@ function Explore() {
         <p className='exploreCategoryHeading'>Categories</p>
         <div className='exploreCategories'>
           <Link to='/category/rent'>
-            <img
-              src={rentCategoryImage}
-              alt='rent'
-              className='exploreCategoryImg'
-            />
+            <div className='overlay'>
+              <img
+                src={rentCategoryImage}
+                alt='rent'
+                className='exploreCategoryImg'
+              />
+              <p className='overlay-text'>Rent</p>
+            </div>
             <p className='exploreCategoryName'>Places for rent</p>
           </Link>
+          
           <Link to='/category/sale'>
-            <img
-              src={sellCategoryImage}
-              alt='sell'
-              className='exploreCategoryImg'
-            />
+            <div className='overlay'>
+              <img
+                src={sellCategoryImage}
+                alt='sell'
+                className='exploreCategoryImg'
+              />
+              <p className='overlay-text'>Sale</p>
+            </div>
             <p className='exploreCategoryName'>Places for sale</p>
           </Link>
         </div>

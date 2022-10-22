@@ -413,6 +413,8 @@ button {
   border-radius: 1.5rem;
   object-fit: cover;
   margin: 0 auto;
+  grid-column: 1/2;
+  grid-row: 1/2;
 }
 
 .exploreCategoryName {
@@ -420,6 +422,27 @@ button {
   text-align: center;
   font-size: 20px;
   margin: 6px;
+}
+
+.overlay {
+  display: grid;
+}
+
+.overlay-text {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  background: rgba(0, 0, 0, 0.8);
+  color: #f2f4f8;
+  font-size: 36px;
+  letter-spacing: 3px;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  display: none;
+}
+
+.overlay:hover > .overlay-text {
+  display: flex;
 }
 
 .category {
