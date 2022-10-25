@@ -1,6 +1,6 @@
 //React
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 //Firebase
 import { getDoc, doc } from 'firebase/firestore'
 import { db } from '../firebase.config'
@@ -8,6 +8,7 @@ import { db } from '../firebase.config'
 import Spinner from '../components/Spinner'
 import shareIcon from '../assets/svg/shareIcon.svg'
 import copyIcon from '../assets/svg/copyToClipboard.svg'
+import arrowBack from '../assets/svg/arrowBack.svg'
 import { toast } from 'react-toastify'
 // Swiper (for imgs slider)
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper'
@@ -25,6 +26,8 @@ function Listing() {
     const [isLoading, setisLoading] = useState(true)
     const [shareLinkCopied, setShareLinkCopied] = useState(false)
     const [emailCopied, setEmailCopied] = useState(false)
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchListing = async () => {
@@ -164,9 +167,15 @@ function Listing() {
                         }}
                     />
                     {emailCopied && <p className='copiedEmailMessage'>Email copied to clipboard!</p>}
+                
                 </div>
                 </>
             )}    
+
+            <div className='back-btn' onClick={() => navigate(-1)}>
+                <img src={arrowBack} alt="back arrow" />    
+                <p>Back</p>
+            </div>
 
         </main>
   )
