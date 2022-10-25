@@ -157,7 +157,7 @@ button {
   left: 0;
   bottom: 0;
   right: 0;
-  height: 80px;
+  height: 70px;
   background-color: #ffffff;
   z-index: 1000;
   display: flex;
@@ -301,6 +301,21 @@ button {
   background-color: #ffffff;
   border-radius: 50%;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.back-btn {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.1rem;
+  margin-top: 1.5rem;
+  margin-left: auto;
+  margin-bottom: 8rem;
+  background-color: #ffffff;
+  border-radius: 10px;
+  max-width: 150px;
+  font-size: 14px;
 }
 
 .socialIconImg {
@@ -642,7 +657,7 @@ button {
   display: flex;
   max-width: 650px;
   margin-inline: auto;
-  margin-bottom: 8rem;
+  /* margin-bottom: 8rem; */
   align-items: center;
   justify-content: center;
   position: relative;
